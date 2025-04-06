@@ -4,7 +4,7 @@ import {loginUser, registerUser, status, logout } from "../controllers/auth.cont
 
 const router = express.Router();
 
-router.post('/', loginUser);
+router.post('/login', loginUser);
 router.post('/register', registerUser);
 router.get('/status', status);
 router.post('/logout', logout);

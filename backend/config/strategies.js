@@ -1,37 +1,33 @@
 import passport from "passport";
 import {Strategy} from "passport-local"
+import User from "../models/user.model.js";
 
 //serialize user after fetching + stores into session data
 //id is used in deserialization
-//TODO fix issue with ID serialization, now using email
 passport.serializeUser((user, done) => {
-    console.log("Serialize")
-    // console.log(user.email)
-    done(null, user.email)
+    return done(null, user.id);
 })
 
 passport.deserializeUser(async (id, done) => {
     try {
-        console.log("DeSerialize")
-        const user = await UserTest.findOne({email:id})
+        const user = await User.findById(id)
         if (!user) {
             throw new Error("User not found")
         }
         // console.log("user: " + user)
-        done(null, user);  //success
+        return done(null, user);  //success
     }catch (e) {
-        done(e, null);  //fail - next mw
+        return done(e, null);  //fail - next mw
     }
 })
 
 //option + verify func
-export default passport.use(
-    new Strategy({
-        usernameField: 'email'
-    }, async (username, password, done) => {
+passport.use(
+    new Strategy(
+        async (username, password, done) => {
         //getUser +  //check password
         try{
-            const user = await UserTest.findByEmail(username)
+            const user = await User.findOne({username})
             console.log(user);
             if (!user) {
                 throw new Error("User not found")
@@ -42,9 +38,9 @@ export default passport.use(
             if(!match) {
                 throw new Error("Password mismatch")
             }
-            done(null, user);  //success
+            return done(null, user);  //success
         } catch(err) {
-            done(err, null);  //fail - next mw
+           return  done(err, null);  //fail - next mw
         }
 
     })

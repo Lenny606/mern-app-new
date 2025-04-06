@@ -11,7 +11,6 @@ import passport from 'passport';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import mongoose from "mongoose";
 import MongoStore from 'connect-mongo';
 //import passport strategy from file
 import "./config/strategies.js";
@@ -30,10 +29,7 @@ app.use(express.json({limit: '10mb', strict: true, type: 'application/json'}))
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET))
 app.disable('x-powered-by'); //disable stack detection
 
-
-// // Enable CORS for all origins
-
-//////// PASSPORT + set store to DTB
+// PASSPORT + set store to DTB
 app.use(session({
     secret: "test-secret",
     saveUninitialized: false,
@@ -42,9 +38,9 @@ app.use(session({
         maxAge: 60 * 60 * 24
     },
     //saves cookies into database>
-    // store: MongoStore.create({
-    //     mongoUrl: process.env.DTB_URL
-    // })
+    store: MongoStore.create({
+        mongoUrl: process.env.DTB_URL
+    })
 }))
 
 app.use(passport.initialize())
