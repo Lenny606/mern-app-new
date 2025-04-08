@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import {hash} from "../utility/hashString.js";
 import {MESSAGES} from "../enums/messages.js";
 import {STATUS} from "../enums/statusTypes.js";
+import Logger from "../utility/logger.js";
 
 
 // export const loginUser = async (req, res) => {
@@ -44,26 +45,26 @@ export const loginUser = async (req, res, next) => {
     //     return res.status(500).json({ message: "Failed to validate CAPTCHA response" });
     // }
 
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return next(err); // Passes error to Express's default error handler
-        }
-        if (!user) {
-            return res.status(401).json({message: 'Invalid username or password', success: false});
-        }
-
-        // Log the user in
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err); // Handle error during login
-            }
-
-            //TODO hash token
-            const token = "testToken";
-
-            return res.status(200).json({message: 'Login successful', success: true, user, token});
-        });
-    })(req, res, next); // Call the passport.authenticate function
+    // passport.authenticate('local', (err, user, info) => {
+    //     if (err) {
+    //         return next(err); // Passes error to Express's default error handler
+    //     }
+    //     if (!user) {
+    //         return res.status(401).json({message: 'Invalid username or password', success: false});
+    //     }
+    //
+    //     // Log the user in
+    //     req.logIn(user, (err) => {
+    //         if (err) {
+    //             return next(err); // Handle error during login
+    //         }
+    //
+    //         //TODO hash token
+    //         const token = "testToken";
+    //
+    //         return res.status(200).json({message: 'Login successful', success: true, user, token});
+    //     });
+    // })(req, res, next); // Call the passport.authenticate function
 };
 
 

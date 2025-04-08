@@ -31,13 +31,13 @@ app.disable('x-powered-by'); //disable stack detection
 
 // PASSPORT + set store to DTB
 app.use(session({
-    secret: "test-secret",
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: {
         maxAge: 60 * 60 * 24
     },
-    //saves cookies into database>
+    //saves cookies into database
     store: MongoStore.create({
         mongoUrl: process.env.DTB_URL
     })
